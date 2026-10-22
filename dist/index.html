@@ -18,14 +18,14 @@
         </div>
         <div class="hero-actions">
           <button class="icon-button" aria-label="返回">‹</button>
-          <div class="coach-pill"><span>推荐适合你带的…</span><span class="mini-avatar private-identity"></span></div>
+          <div class="coach-pill"><span>推荐适合你带的…</span><span class="mini-avatar"></span></div>
         </div>
         <div class="profile-row">
           <div>
-            <h1 class="private-identity">林朵朵</h1>
+            <h1>林朵朵</h1>
             <div class="badges"><span>▣ LV2 ›</span><span>经营评级 B+ ›</span><span>电商带货达人 ›</span></div>
           </div>
-          <div class="profile-avatar private-identity" aria-label="头像"></div>
+          <div class="profile-avatar" aria-label="头像"></div>
         </div>
       </header>
 
@@ -41,14 +41,14 @@
         <section class="card data-card">
           <div class="card-title-row"><h2>全部数据</h2><span class="range"><b>实时</b><em>近7日</em></span></div>
           <div class="metric-grid">
-            <button class="metric"><strong class="private-money">1.4<small>万元</small></strong><span>成交金额 ›</span></button>
-            <button class="metric"><strong class="private-money">720<small>个</small></strong><span>成交订单数 ›</span></button>
-            <button class="metric"><strong class="private-money">12,856.40<small>元</small></strong><span>结算佣金 ›</span></button>
+            <button class="metric"><strong>1.4<small>万元</small></strong><span class="privacy-mask">成交金额 ›</span></button>
+            <button class="metric"><strong>720<small>个</small></strong><span class="privacy-mask">成交订单数 ›</span></button>
+            <button class="metric"><strong>12,856.40<small>元</small></strong><span class="privacy-mask">结算佣金 ›</span></button>
           </div>
           <div class="latest-row">
-            <div class="work-thumb private-content"><span></span></div>
+            <div class="work-thumb"><span></span></div>
             <div class="latest-copy">
-              <p><small>最新作品</small><b class="private-content">现做现发，手工荠菜鲜肉馄饨…</b></p>
+              <p><small>最新作品</small><b>现做现发，手工荠菜鲜肉馄饨…</b></p>
               <span>观看 982　商品曝光 975　商品点击 105</span>
             </div>
           </div>
@@ -74,7 +74,7 @@
         <button><span>▢</span>选品</button>
         <button class="publish" aria-label="发布">＋</button>
         <button><span>◯<i>9</i></span>消息</button>
-        <button data-action="settings"><span>▣</span>数据</button>
+        <button><span>▣</span>数据</button>
       </nav>
     </section>
 
@@ -88,30 +88,19 @@
         <div class="nav-title">
           <button class="icon-button" data-go="home" aria-label="返回首页">‹</button>
           <h1>短视频管理</h1>
-          <button class="settings-button" data-action="settings" aria-label="隐私设置">⬡</button>
+          <button class="settings-button" aria-label="设置">⬡</button>
         </div>
         <div class="video-tabs" role="tablist">
           <button>全部</button><button class="active">带货</button><button>橱窗引流</button>
         </div>
         <div class="sort-row">
-          <button>发布时间 ◆</button><button>成交金额 ◆</button><button>结算金额 ◆</button><button class="active">预估佣金 ◆</button>
+          <button><span class="privacy-mask">发布时间</span> ◆</button><button><span class="privacy-mask">成交金额</span> ◆</button><button><span class="privacy-mask">结算金额</span> ◆</button><button class="active"><span class="privacy-mask">预估佣金</span> ◆</button>
         </div>
       </header>
 
       <div class="video-list" id="videoList"></div>
     </section>
 
-    <div class="sheet-backdrop" data-action="close-settings"></div>
-    <aside class="privacy-sheet" aria-hidden="true">
-      <div class="sheet-handle"></div>
-      <div class="sheet-head"><div><small>录屏工具</small><h2>隐私模糊设置</h2></div><button data-action="close-settings">×</button></div>
-      <p>模糊效果直接作用于页面元素，滚动和切换页面时会自动跟随。</p>
-      <label><span><b>账号身份</b><small>昵称、头像、助手头像</small></span><input type="checkbox" data-privacy="identity" checked><i></i></label>
-      <label><span><b>作品与商品</b><small>封面、标题、商品名称</small></span><input type="checkbox" data-privacy="content" checked><i></i></label>
-      <label><span><b>成交与佣金</b><small>全部金额和订单数</small></span><input type="checkbox" data-privacy="money"><i></i></label>
-      <div class="blur-control"><span>模糊强度 <b id="blurValue">7px</b></span><input id="blurRange" type="range" min="3" max="16" value="7"></div>
-      <button class="sheet-done" data-action="close-settings">完成</button>
-    </aside>
   </main>
   <script src="app.js"></script>
 </body>
