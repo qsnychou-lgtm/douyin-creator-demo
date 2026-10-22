@@ -59,7 +59,7 @@ button { appearance: none; border: 0; background: transparent; color: inherit; f
 .metric strong small { font-size: 11px; margin-left: 2px; }
 .metric span { color: #a1a4aa; font-size: 11px; white-space: nowrap; }
 .latest-row { display: flex; gap: 10px; margin-top: 19px; align-items: center; }
-.work-thumb { width: 34px; height: 42px; flex: 0 0 auto; border-radius: 5px; background: repeating-linear-gradient(90deg,#62694b 0 3px,#cfd1b7 3px 5px); overflow: hidden; }
+.work-thumb { width: 34px; height: 42px; flex: 0 0 auto; border-radius: 5px; background-image: url('assets/product-covers-v1.png'); background-size: 500% 600%; background-position: 0 0; overflow: hidden; }
 .latest-copy { min-width: 0; }
 .latest-copy p { margin: 0 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
 .latest-copy p small { margin-right: 8px; color: #9da0a7; }
@@ -105,16 +105,8 @@ button { appearance: none; border: 0; background: transparent; color: inherit; f
 .video-list { padding: 0 0 22px; }
 .video-item { min-height: 194px; padding: 15px 18px 12px; background: white; margin-bottom: 8px; position: relative; }
 .video-main { display: grid; grid-template-columns: 61px 1fr; gap: 10px; }
-.video-thumb { width: 61px; height: 78px; border-radius: 7px; overflow: hidden; position: relative; background: linear-gradient(145deg,#eed1b8,#a86b65 55%,#3f2527); box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); }
-.video-thumb::before { content:''; position:absolute; width:28px; height:39px; border-radius:13px 13px 9px 9px; background:#f5d6b8; left:16px; top:14px; box-shadow: 0 0 0 7px rgba(255,255,255,.76), 0 7px 18px rgba(43,24,23,.18); }
-.video-thumb.theme-1 { background: linear-gradient(145deg,#f0dfc7,#af6d55 50%,#58403a); }
-.video-thumb.theme-2 { background: linear-gradient(145deg,#d9e6dc,#5f806e 48%,#e0bf98); }
-.video-thumb.theme-3 { background: linear-gradient(145deg,#decdf3,#9f79cc 48%,#f2d1bc); }
-.video-thumb.theme-4 { background: linear-gradient(145deg,#e7d7c8,#825448 48%,#efe1cb); }
-.video-thumb.theme-5 { background: linear-gradient(145deg,#d6e8f5,#4a8bb4 48%,#f2d9c1); }
-.video-thumb.theme-6 { background: linear-gradient(145deg,#f6e3a5,#e79828 48%,#9b5b2a); }
-.video-thumb.theme-7 { background: linear-gradient(145deg,#ecddd4,#ad7e74 48%,#60413e); }
-.video-thumb.theme-8 { background: linear-gradient(145deg,#e4efd6,#7ca354 48%,#d8c19f); }
+.video-thumb { width: 61px; height: 78px; border-radius: 7px; overflow: hidden; position: relative; background-image: url('assets/product-covers-v1.png'); background-size: 500% 600%; background-position: var(--cover-x) var(--cover-y); background-repeat: no-repeat; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+.video-thumb::after { content:''; position:absolute; inset:auto 0 0; height:25px; background:linear-gradient(transparent,rgba(0,0,0,.34)); }
 .video-thumb time { position:absolute; left:5px; bottom:4px; color:white; font-size:11px; text-shadow:0 1px 3px #000; z-index:2; }
 .video-copy { min-width: 0; }
 .video-title { margin: 1px 0 5px; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

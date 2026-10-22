@@ -53,10 +53,10 @@ Object.assign(videoData[1], {gmv:'¥1.57万', settled:'¥1.26万', commission:'�
 Object.assign(videoData[2], {gmv:'¥5,304.81', settled:'¥3,245.93', commission:'¥2,514.21'});
 
 const videoList = document.querySelector('#videoList');
-videoList.innerHTML = videoData.map((item) => `
+videoList.innerHTML = videoData.map((item, index) => `
   <article class="video-item">
     <div class="video-main">
-      <div class="video-thumb ${item.theme}"><time>${item.date}</time></div>
+      <div class="video-thumb" style="--cover-x:${(index % 5) * 25}%;--cover-y:${Math.floor(index / 5) * 20}%"><time>${item.date}</time></div>
       <div class="video-copy">
         <h2 class="video-title">${item.title}</h2>
         <div class="video-stats">▶ ${item.views}　♥ ${item.likes}　● ${item.comments}</div>
