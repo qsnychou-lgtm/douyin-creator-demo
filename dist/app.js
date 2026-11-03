@@ -91,8 +91,9 @@ const videoList = document.querySelector('#videoList');
 const coverInput = document.querySelector('#coverInput');
 const uploadPreviews = document.querySelector('#uploadPreviews');
 const uploadCount = document.querySelector('#uploadCount');
-const customTitles = document.querySelector('#customTitles');
-const titleCount = document.querySelector('#titleCount');
+const itemCount = document.querySelector('#itemCount');
+const productNames = document.querySelector('#productNames');
+const productNameCount = document.querySelector('#productNameCount');
 const customForm = document.querySelector('#customForm');
 const formError = document.querySelector('#formError');
 let uploadedCovers = [];
@@ -174,6 +175,7 @@ function clearUploadedCovers() {
 function renderCoverPreviews() {
   uploadPreviews.replaceChildren();
   uploadCount.textContent = `${uploadedCovers.length} 张`;
+  syncGeneratedCount();
   uploadedCovers.forEach((item, index) => {
     const preview = document.createElement('div');
     preview.className = 'upload-preview';
@@ -199,32 +201,61 @@ function renderCoverPreviews() {
 
 coverInput.addEventListener('change', () => {
   const imageFiles = [...coverInput.files].filter(file => file.type.startsWith('image/'));
-  imageFiles.forEach(file => uploadedCovers.push({name:file.name, url:URL.createObjectURL(file)}));
+  const availableSlots = Math.max(0, 100 - uploadedCovers.length);
+  imageFiles.slice(0, availableSlots).forEach(file => uploadedCovers.push({name:file.name, url:URL.createObjectURL(file)}));
   coverInput.value = '';
-  formError.textContent = '';
+  formError.textContent = imageFiles.length > availableSlots ? '一次最多生成 100 条，超出的图片没有加入。' : '';
   renderCoverPreviews();
 });
 
-function updateTitleCount() {
-  const count = customTitles.value.split('\n').map(title => title.trim()).filter(Boolean).length;
-  titleCount.textContent = `已填写 ${count} 条`;
+function getProductNameLines() {
+  return productNames.value.split('\n').map(name => name.trim());
 }
 
-customTitles.addEventListener('input', updateTitleCount);
+function updateProductNameCount() {
+  const enteredCount = getProductNameLines().filter(Boolean).length;
+  productNameCount.textContent = `已填写 ${enteredCount} / ${uploadedCovers.length} 个`;
+}
 
-const neutralTitles = [
-  '#居家整理记录 厨房空间收纳', '#日常用品分享 随行杯使用', '#通勤好物记录 帆布包搭配',
-  '#家庭清洁记录 桌面日常整理', '#厨房用品分享 备餐工具使用', '#周末生活记录 房间简单布置',
-  '#办公室日常 桌面用品整理', '#旅行收纳记录 随身物品分类', '#家常饮品记录 杯具日常使用',
-  '#换季整理记录 衣物分类收纳', '#居家用品记录 浴室空间整理', '#日常穿搭记录 基础单品搭配'
-];
+function syncGeneratedCount() {
+  itemCount.value = String(uploadedCovers.length);
+  itemCount.textContent = `${uploadedCovers.length} 条`;
+  updateProductNameCount();
+}
+
+productNames.addEventListener('input', updateProductNameCount);
+
+const removedTitleWords = new RegExp([
+  '必' + '备', '神' + '器', '救' + '星', '闭眼' + '入', '搞' + '定', '爆' + '品', '爆' + '款',
+  '正' + '品', '最' + '新', '绝' + '对', '唯' + '一', '首' + '选', '顶' + '级', '保' + '证',
+  '完' + '美', '瞬' + '间', '美' + '白', '祛' + '痘', '速' + '热', '见' + '效'
+].join('|'), 'g');
+
+function normalizeProductName(name) {
+  const cleaned = String(name || '').replace(removedTitleWords, '').replace(/[#｜|，,。！!？?]/g, '').replace(/\s+/g, '').trim();
+  return cleaned.slice(0, 18) || '日常用品';
+}
+
+function makeNeutralTitle(productName) {
+  const name = normalizeProductName(productName);
+  if (/T恤|衬衫|卫衣|毛衣|外套|裤|裙|袜|鞋|帽|围巾|内衣|背心/.test(name)) return `#日常穿搭记录 ${name}搭配分享`;
+  if (/包|皮带|腰带|眼镜|手表|首饰|项链|耳环/.test(name)) return `#通勤搭配记录 ${name}日常搭配`;
+  if (/锅|碗|杯|筷|勺|刀|砧板|保鲜盒|饭盒|餐具|料理|榨汁/.test(name)) return `#厨房用品记录 ${name}日常使用`;
+  if (/收纳|置物|衣架|挂钩|储物|整理/.test(name)) return `#居家整理记录 ${name}收纳分享`;
+  if (/清洁|拖把|抹布|湿巾|洗衣|刷子|除尘/.test(name)) return `#居家清洁记录 ${name}日常使用`;
+  if (/手机|耳机|键盘|鼠标|充电|支架|台灯|风扇|音箱/.test(name)) return `#数码用品记录 ${name}使用分享`;
+  if (/零食|饼干|面包|坚果|糖|茶|咖啡|饮料|果汁|燕麦/.test(name)) return `#日常饮食记录 ${name}分享`;
+  if (/枕|床|被|毛毯|拖鞋|香薰|加湿器|夜灯/.test(name)) return `#居家生活记录 ${name}使用分享`;
+  return `#日常用品记录 ${name}使用分享`;
+}
 
 function randomBetween(min, max, power = 1) {
   return min + (max - min) * Math.pow(Math.random(), power);
 }
 
-function makeCustomData(count, minCommission, maxCommission, titles) {
+function makeCustomData(count, minCommission, maxCommission, names) {
   return Array.from({length:count}, (_, index) => {
+    const productName = normalizeProductName(names[index]);
     const commission = Math.round(randomBetween(minCommission, maxCommission, 1.75) * 100) / 100;
     const commissionRate = randomBetween(.09, .28);
     const gmv = Math.max(commission, Math.round((commission / commissionRate) * 100) / 100);
@@ -236,8 +267,8 @@ function makeCustomData(count, minCommission, maxCommission, titles) {
     date.setDate(date.getDate() - index - 1);
     return {
       date:`${String(date.getMonth() + 1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`,
-      title:titles[index] || neutralTitles[index % neutralTitles.length],
-      product:`自定义商品 ${String(index + 1).padStart(2,'0')}`,
+      title:makeNeutralTitle(productName),
+      product:`${productName}｜日常款`,
       views:viewCount >= 10000 ? `${(viewCount / 10000).toFixed(2).replace(/0$/,'')}万` : viewCount.toLocaleString('zh-CN'),
       likes:likeCount.toLocaleString('zh-CN'),
       comments:commentCount.toLocaleString('zh-CN'),
@@ -252,13 +283,13 @@ function makeCustomData(count, minCommission, maxCommission, titles) {
 customForm.addEventListener('submit', event => {
   event.preventDefault();
   formError.textContent = '';
-  const count = Number(document.querySelector('#itemCount').value);
+  const count = uploadedCovers.length;
   const minCommission = Number(document.querySelector('#commissionMin').value);
   const maxCommission = Number(document.querySelector('#commissionMax').value);
-  const titles = customTitles.value.split('\n').map(title => title.trim()).filter(Boolean);
+  const names = getProductNameLines();
 
-  if (!Number.isInteger(count) || count < 1 || count > 100) {
-    formError.textContent = '生成条数请填写 1—100 之间的整数。';
+  if (count < 1) {
+    formError.textContent = '请先上传至少 1 张视频封面。';
     return;
   }
   if (!Number.isFinite(minCommission) || !Number.isFinite(maxCommission) || minCommission <= 0 || maxCommission <= 0) {
@@ -270,7 +301,7 @@ customForm.addEventListener('submit', event => {
     return;
   }
 
-  renderVideoList(makeCustomData(count, minCommission, maxCommission, titles));
+  renderVideoList(makeCustomData(count, minCommission, maxCommission, names));
   setScreen('videos');
 });
 
@@ -278,7 +309,7 @@ document.querySelector('#restoreDemo').addEventListener('click', () => {
   renderVideoList(videoData);
   clearUploadedCovers();
   customForm.reset();
-  updateTitleCount();
+  syncGeneratedCount();
   formError.textContent = '';
   setScreen('videos');
 });

@@ -157,6 +157,7 @@ button { appearance: none; border: 0; background: transparent; color: inherit; f
 .preview-index { position: absolute; left: 4px; bottom: 4px; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: rgba(24,25,29,.78); color: white; font-size: 10px; font-weight: 700; }
 .upload-preview button { position: absolute; right: 3px; top: 3px; width: 20px; height: 20px; border-radius: 50%; background: rgba(24,25,29,.72); color: white; font-size: 16px; line-height: 18px; cursor: pointer; }
 .form-row { min-height: 49px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f0f1f3; font-size: 14px; }
+.auto-count-row output { padding: 7px 11px; border-radius: 9px; background: #fff0f3; color: #e9345e; font-size: 13px; font-weight: 700; }
 .input-suffix, .money-input { display: flex; align-items: center; border: 1px solid #e4e5e9; border-radius: 9px; background: #fafafd; overflow: hidden; }
 .input-suffix input, .money-input input { width: 85px; height: 38px; padding: 0 10px; border: 0; outline: none; background: transparent; font: inherit; text-align: right; }
 .input-suffix i { padding-right: 10px; color: #888b92; font-size: 12px; font-style: normal; }

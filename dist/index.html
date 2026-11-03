@@ -126,16 +126,16 @@
           <div class="guide-steps">
             <div><b>1</b><span><strong>上传封面</strong><small>可以一次选多张</small></span></div>
             <i>›</i>
-            <div><b>2</b><span><strong>填写标题</strong><small>按图片顺序填写</small></span></div>
+            <div><b>2</b><span><strong>填写名称</strong><small>只需填写“T恤”</small></span></div>
             <i>›</i>
             <div><b>3</b><span><strong>设置金额</strong><small>生成出单页面</small></span></div>
           </div>
-          <p>网页不会自动识别图片内容，请为封面填写对应标题。</p>
+          <p>上传几张封面就生成几条；只需填写商品名称，系统会自动组合成中性标题。</p>
         </section>
 
         <section class="form-card upload-card">
           <div class="form-heading">
-            <div><h2>视频封面</h2><p>可批量选择，图片仅在当前页面使用</p></div>
+            <div><h2>视频封面</h2><p>可批量选择，生成条数会与图片数量一致</p></div>
             <span id="uploadCount">0 张</span>
           </div>
           <label class="upload-zone" for="coverInput">
@@ -149,10 +149,10 @@
 
         <section class="form-card">
           <div class="form-heading"><div><h2>生成设置</h2><p>佣金会在范围内按高低错落生成</p></div></div>
-          <label class="form-row">
+          <div class="form-row auto-count-row">
             <span>生成条数</span>
-            <span class="input-suffix"><input id="itemCount" type="number" min="1" max="100" value="30" inputmode="numeric" required /><i>条</i></span>
-          </label>
+            <output id="itemCount">0 条</output>
+          </div>
           <div class="range-fields">
             <label><span>最低佣金</span><span class="money-input"><i>¥</i><input id="commissionMin" type="number" min="0.01" step="0.01" value="20" inputmode="decimal" required /></span></label>
             <span class="range-divider">—</span>
@@ -162,16 +162,16 @@
 
         <section class="form-card">
           <div class="form-heading">
-            <div><h2>填写视频标题</h2><p>按照封面序号，每行填写一个对应标题</p></div>
-            <span id="titleCount">已填写 0 条</span>
+            <div><h2>填写商品名称</h2><p>按照封面序号，每行只填一个简单名称</p></div>
+            <span id="productNameCount">已填写 0 / 0 个</span>
           </div>
           <div class="title-help">
-            <b>填写参考</b>
-            <span>#使用场景 ＋ 商品名称 ＋ 日常使用</span>
-            <small>例如：#通勤用品记录 保温杯日常使用</small>
+            <b>不用自己写完整标题</b>
+            <span>填写“T恤”即可</span>
+            <small>系统会生成：#日常穿搭记录 T恤搭配分享</small>
           </div>
-          <textarea id="customTitles" rows="6" maxlength="3000" placeholder="第 1 行对应封面 1&#10;第 2 行对应封面 2&#10;第 3 行对应封面 3……"></textarea>
-          <p class="field-note">没有填写的部分会使用中性示例标题，但不会根据图片内容生成。</p>
+          <textarea id="productNames" rows="6" maxlength="3000" placeholder="T恤&#10;保温杯&#10;收纳盒"></textarea>
+          <p class="field-note">第 1 行对应封面 1，第 2 行对应封面 2；没有填写的部分会使用“日常用品”。</p>
         </section>
 
         <p class="form-error" id="formError" role="alert"></p>
