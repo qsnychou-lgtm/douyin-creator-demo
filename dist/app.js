@@ -91,6 +91,8 @@ const videoList = document.querySelector('#videoList');
 const coverInput = document.querySelector('#coverInput');
 const uploadPreviews = document.querySelector('#uploadPreviews');
 const uploadCount = document.querySelector('#uploadCount');
+const customTitles = document.querySelector('#customTitles');
+const titleCount = document.querySelector('#titleCount');
 const customForm = document.querySelector('#customForm');
 const formError = document.querySelector('#formError');
 let uploadedCovers = [];
@@ -178,6 +180,9 @@ function renderCoverPreviews() {
     const image = document.createElement('img');
     image.src = item.url;
     image.alt = `已上传封面 ${index + 1}`;
+    const order = document.createElement('span');
+    order.className = 'preview-index';
+    order.textContent = index + 1;
     const remove = document.createElement('button');
     remove.type = 'button';
     remove.setAttribute('aria-label', `移除第 ${index + 1} 张封面`);
@@ -187,7 +192,7 @@ function renderCoverPreviews() {
       uploadedCovers.splice(index, 1);
       renderCoverPreviews();
     });
-    preview.append(image, remove);
+    preview.append(image, order, remove);
     uploadPreviews.append(preview);
   });
 }
@@ -199,6 +204,13 @@ coverInput.addEventListener('change', () => {
   formError.textContent = '';
   renderCoverPreviews();
 });
+
+function updateTitleCount() {
+  const count = customTitles.value.split('\n').map(title => title.trim()).filter(Boolean).length;
+  titleCount.textContent = `已填写 ${count} 条`;
+}
+
+customTitles.addEventListener('input', updateTitleCount);
 
 const neutralTitles = [
   '#居家整理记录 厨房空间收纳', '#日常用品分享 随行杯使用', '#通勤好物记录 帆布包搭配',
@@ -243,7 +255,7 @@ customForm.addEventListener('submit', event => {
   const count = Number(document.querySelector('#itemCount').value);
   const minCommission = Number(document.querySelector('#commissionMin').value);
   const maxCommission = Number(document.querySelector('#commissionMax').value);
-  const titles = document.querySelector('#customTitles').value.split('\n').map(title => title.trim()).filter(Boolean);
+  const titles = customTitles.value.split('\n').map(title => title.trim()).filter(Boolean);
 
   if (!Number.isInteger(count) || count < 1 || count > 100) {
     formError.textContent = '生成条数请填写 1—100 之间的整数。';
@@ -266,6 +278,7 @@ document.querySelector('#restoreDemo').addEventListener('click', () => {
   renderVideoList(videoData);
   clearUploadedCovers();
   customForm.reset();
+  updateTitleCount();
   formError.textContent = '';
   setScreen('videos');
 });

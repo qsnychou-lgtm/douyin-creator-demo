@@ -121,6 +121,18 @@
       </header>
 
       <form class="custom-form" id="customForm">
+        <section class="guide-card" aria-label="填写步骤">
+          <h2>按下面 3 步生成</h2>
+          <div class="guide-steps">
+            <div><b>1</b><span><strong>上传封面</strong><small>可以一次选多张</small></span></div>
+            <i>›</i>
+            <div><b>2</b><span><strong>填写标题</strong><small>按图片顺序填写</small></span></div>
+            <i>›</i>
+            <div><b>3</b><span><strong>设置金额</strong><small>生成出单页面</small></span></div>
+          </div>
+          <p>网页不会自动识别图片内容，请为封面填写对应标题。</p>
+        </section>
+
         <section class="form-card upload-card">
           <div class="form-heading">
             <div><h2>视频封面</h2><p>可批量选择，图片仅在当前页面使用</p></div>
@@ -149,8 +161,17 @@
         </section>
 
         <section class="form-card">
-          <div class="form-heading"><div><h2>视频标题</h2><p>选填，每行一个；不足部分自动补充中性标题</p></div></div>
-          <textarea id="customTitles" rows="6" maxlength="3000" placeholder="例如：&#10;#居家整理记录 厨房空间收纳&#10;#日常用品分享 随行杯使用"></textarea>
+          <div class="form-heading">
+            <div><h2>填写视频标题</h2><p>按照封面序号，每行填写一个对应标题</p></div>
+            <span id="titleCount">已填写 0 条</span>
+          </div>
+          <div class="title-help">
+            <b>填写参考</b>
+            <span>#使用场景 ＋ 商品名称 ＋ 日常使用</span>
+            <small>例如：#通勤用品记录 保温杯日常使用</small>
+          </div>
+          <textarea id="customTitles" rows="6" maxlength="3000" placeholder="第 1 行对应封面 1&#10;第 2 行对应封面 2&#10;第 3 行对应封面 3……"></textarea>
+          <p class="field-note">没有填写的部分会使用中性示例标题，但不会根据图片内容生成。</p>
         </section>
 
         <p class="form-error" id="formError" role="alert"></p>
