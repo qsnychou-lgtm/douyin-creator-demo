@@ -59,6 +59,12 @@
           <button><b>商单任务</b><span>14个商单待报名</span><em class="feature-art bottle">▥</em><small>稿费 100元</small></button>
           <button><b>商品合作</b><span>流量趋势参考</span><em class="feature-art apple">●</em><small>提佣 8%</small></button>
         </section>
+
+        <button class="custom-entry card" data-go="custom">
+          <span class="custom-entry-icon">＋</span>
+          <span><b>自定义生成</b><small>上传封面并设置佣金范围</small></span>
+          <em>›</em>
+        </button>
       </div>
 
       <div class="management-dock">
@@ -88,7 +94,7 @@
         <div class="nav-title">
           <button class="icon-button" data-go="home" aria-label="返回首页">‹</button>
           <h1>短视频管理</h1>
-          <button class="settings-button" aria-label="设置">⬡</button>
+          <button class="settings-button" data-go="custom" aria-label="自定义生成">自定义</button>
         </div>
         <div class="video-tabs" role="tablist">
           <button>全部</button><button class="active">带货</button><button>橱窗引流</button>
@@ -99,6 +105,61 @@
       </header>
 
       <div class="video-list" id="videoList"></div>
+    </section>
+
+    <section class="screen custom-screen" data-screen="custom">
+      <header class="custom-header">
+        <div class="statusbar">
+          <span class="js-clock privacy-mask status-time">23:47</span>
+          <span class="status-icons"><i></i><i></i><i></i><b>62</b></span>
+        </div>
+        <div class="nav-title">
+          <button class="icon-button" data-go="videos" aria-label="返回短视频管理">‹</button>
+          <h1>自定义生成</h1>
+          <button class="header-text-button" data-go="videos">取消</button>
+        </div>
+      </header>
+
+      <form class="custom-form" id="customForm">
+        <section class="form-card upload-card">
+          <div class="form-heading">
+            <div><h2>视频封面</h2><p>可批量选择，图片仅在当前页面使用</p></div>
+            <span id="uploadCount">0 张</span>
+          </div>
+          <label class="upload-zone" for="coverInput">
+            <input id="coverInput" type="file" accept="image/*" multiple />
+            <span class="upload-plus">＋</span>
+            <b>上传图片</b>
+            <small>支持一次选择多张图片</small>
+          </label>
+          <div class="upload-previews" id="uploadPreviews" aria-live="polite"></div>
+        </section>
+
+        <section class="form-card">
+          <div class="form-heading"><div><h2>生成设置</h2><p>佣金会在范围内按高低错落生成</p></div></div>
+          <label class="form-row">
+            <span>生成条数</span>
+            <span class="input-suffix"><input id="itemCount" type="number" min="1" max="100" value="30" inputmode="numeric" required /><i>条</i></span>
+          </label>
+          <div class="range-fields">
+            <label><span>最低佣金</span><span class="money-input"><i>¥</i><input id="commissionMin" type="number" min="0.01" step="0.01" value="20" inputmode="decimal" required /></span></label>
+            <span class="range-divider">—</span>
+            <label><span>最高佣金</span><span class="money-input"><i>¥</i><input id="commissionMax" type="number" min="0.01" step="0.01" value="800" inputmode="decimal" required /></span></label>
+          </div>
+        </section>
+
+        <section class="form-card">
+          <div class="form-heading"><div><h2>视频标题</h2><p>选填，每行一个；不足部分自动补充中性标题</p></div></div>
+          <textarea id="customTitles" rows="6" maxlength="3000" placeholder="例如：&#10;#居家整理记录 厨房空间收纳&#10;#日常用品分享 随行杯使用"></textarea>
+        </section>
+
+        <p class="form-error" id="formError" role="alert"></p>
+        <div class="form-actions">
+          <button type="button" class="secondary-button" id="restoreDemo">恢复演示数据</button>
+          <button type="submit" class="primary-button">生成出单页面</button>
+        </div>
+        <p class="privacy-note">上传内容不会发送或保存到服务器，刷新网页后自动清除。</p>
+      </form>
     </section>
 
   </main>

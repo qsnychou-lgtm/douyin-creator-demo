@@ -88,24 +88,187 @@ Object.assign(videoData[1], {gmv:'¥1.57万', settled:'¥1.26万', commission:'�
 Object.assign(videoData[2], {gmv:'¥5,304.81', settled:'¥3,245.93', commission:'¥2,514.21'});
 
 const videoList = document.querySelector('#videoList');
-videoList.innerHTML = videoData.map((item, index) => `
-  <article class="video-item">
-    <div class="video-main">
-      <div class="video-thumb ${index >= 30 ? 'cover-sheet-2' : ''}" style="--cover-x:${(index % 5) * 25}%;--cover-y:${Math.floor((index % 30) / 5) * 20}%"><time class="privacy-mask date-mask">${item.date}</time></div>
-      <div class="video-copy">
-        <h2 class="video-title">${item.title}</h2>
-        <div class="video-stats">▶ ${item.views}　♥ ${item.likes}　● ${item.comments}</div>
-        <div class="product-line"><span class="privacy-mask">🛒 ${item.product}</span></div>
-      </div>
-    </div>
-    <div class="money-row">
-      <div><span class="privacy-mask">成交金额</span><strong>${item.gmv}</strong></div>
-      <div><span class="privacy-mask">结算金额</span><strong>${item.settled}</strong></div>
-      <div><span class="privacy-mask">预估佣金</span><strong>${item.commission}</strong></div>
-    </div>
-    <button class="item-action">设置橱窗信息</button>
-  </article>
-`).join('');
+const coverInput = document.querySelector('#coverInput');
+const uploadPreviews = document.querySelector('#uploadPreviews');
+const uploadCount = document.querySelector('#uploadCount');
+const customForm = document.querySelector('#customForm');
+const formError = document.querySelector('#formError');
+let uploadedCovers = [];
+
+function renderVideoList(items) {
+  videoList.replaceChildren();
+  const fragment = document.createDocumentFragment();
+
+  items.forEach((item, index) => {
+    const article = document.createElement('article');
+    article.className = 'video-item';
+
+    const main = document.createElement('div');
+    main.className = 'video-main';
+    const thumb = document.createElement('div');
+    thumb.className = `video-thumb${!item.coverUrl && index >= 30 ? ' cover-sheet-2' : ''}`;
+    if (item.coverUrl) {
+      thumb.classList.add('custom-cover');
+      thumb.style.backgroundImage = `url("${item.coverUrl}")`;
+    } else {
+      thumb.style.setProperty('--cover-x', `${(index % 5) * 25}%`);
+      thumb.style.setProperty('--cover-y', `${Math.floor((index % 30) / 5) * 20}%`);
+    }
+    const time = document.createElement('time');
+    time.className = 'privacy-mask date-mask';
+    time.textContent = item.date;
+    thumb.append(time);
+
+    const copy = document.createElement('div');
+    copy.className = 'video-copy';
+    const title = document.createElement('h2');
+    title.className = 'video-title';
+    title.textContent = item.title;
+    const stats = document.createElement('div');
+    stats.className = 'video-stats';
+    stats.textContent = `▶ ${item.views}　♥ ${item.likes}　● ${item.comments}`;
+    const productLine = document.createElement('div');
+    productLine.className = 'product-line';
+    const product = document.createElement('span');
+    product.className = 'privacy-mask';
+    product.textContent = `🛒 ${item.product}`;
+    productLine.append(product);
+    copy.append(title, stats, productLine);
+    main.append(thumb, copy);
+
+    const moneyRow = document.createElement('div');
+    moneyRow.className = 'money-row';
+    [['成交金额', item.gmv], ['结算金额', item.settled], ['预估佣金', item.commission]].forEach(([label, value]) => {
+      const cell = document.createElement('div');
+      const labelNode = document.createElement('span');
+      labelNode.className = 'privacy-mask';
+      labelNode.textContent = label;
+      const valueNode = document.createElement('strong');
+      valueNode.textContent = value;
+      cell.append(labelNode, valueNode);
+      moneyRow.append(cell);
+    });
+
+    const action = document.createElement('button');
+    action.className = 'item-action';
+    action.type = 'button';
+    action.textContent = '设置橱窗信息';
+    article.append(main, moneyRow, action);
+    fragment.append(article);
+  });
+
+  videoList.append(fragment);
+}
+
+renderVideoList(videoData);
+
+function clearUploadedCovers() {
+  uploadedCovers.forEach(item => URL.revokeObjectURL(item.url));
+  uploadedCovers = [];
+  coverInput.value = '';
+  renderCoverPreviews();
+}
+
+function renderCoverPreviews() {
+  uploadPreviews.replaceChildren();
+  uploadCount.textContent = `${uploadedCovers.length} 张`;
+  uploadedCovers.forEach((item, index) => {
+    const preview = document.createElement('div');
+    preview.className = 'upload-preview';
+    const image = document.createElement('img');
+    image.src = item.url;
+    image.alt = `已上传封面 ${index + 1}`;
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.setAttribute('aria-label', `移除第 ${index + 1} 张封面`);
+    remove.textContent = '×';
+    remove.addEventListener('click', () => {
+      URL.revokeObjectURL(uploadedCovers[index].url);
+      uploadedCovers.splice(index, 1);
+      renderCoverPreviews();
+    });
+    preview.append(image, remove);
+    uploadPreviews.append(preview);
+  });
+}
+
+coverInput.addEventListener('change', () => {
+  const imageFiles = [...coverInput.files].filter(file => file.type.startsWith('image/'));
+  imageFiles.forEach(file => uploadedCovers.push({name:file.name, url:URL.createObjectURL(file)}));
+  coverInput.value = '';
+  formError.textContent = '';
+  renderCoverPreviews();
+});
+
+const neutralTitles = [
+  '#居家整理记录 厨房空间收纳', '#日常用品分享 随行杯使用', '#通勤好物记录 帆布包搭配',
+  '#家庭清洁记录 桌面日常整理', '#厨房用品分享 备餐工具使用', '#周末生活记录 房间简单布置',
+  '#办公室日常 桌面用品整理', '#旅行收纳记录 随身物品分类', '#家常饮品记录 杯具日常使用',
+  '#换季整理记录 衣物分类收纳', '#居家用品记录 浴室空间整理', '#日常穿搭记录 基础单品搭配'
+];
+
+function randomBetween(min, max, power = 1) {
+  return min + (max - min) * Math.pow(Math.random(), power);
+}
+
+function makeCustomData(count, minCommission, maxCommission, titles) {
+  return Array.from({length:count}, (_, index) => {
+    const commission = Math.round(randomBetween(minCommission, maxCommission, 1.75) * 100) / 100;
+    const commissionRate = randomBetween(.09, .28);
+    const gmv = Math.max(commission, Math.round((commission / commissionRate) * 100) / 100);
+    const settled = Math.round(gmv * randomBetween(.58, .82) * 100) / 100;
+    const viewCount = Math.round(randomBetween(680, 238000, 1.65));
+    const likeCount = Math.max(8, Math.round(viewCount * randomBetween(.008, .029)));
+    const commentCount = Math.max(2, Math.round(likeCount * randomBetween(.045, .12)));
+    const date = new Date();
+    date.setDate(date.getDate() - index - 1);
+    return {
+      date:`${String(date.getMonth() + 1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`,
+      title:titles[index] || neutralTitles[index % neutralTitles.length],
+      product:`自定义商品 ${String(index + 1).padStart(2,'0')}`,
+      views:viewCount >= 10000 ? `${(viewCount / 10000).toFixed(2).replace(/0$/,'')}万` : viewCount.toLocaleString('zh-CN'),
+      likes:likeCount.toLocaleString('zh-CN'),
+      comments:commentCount.toLocaleString('zh-CN'),
+      gmv:compactMoney(gmv),
+      settled:compactMoney(settled),
+      commission:compactMoney(commission),
+      coverUrl:uploadedCovers.length ? uploadedCovers[index % uploadedCovers.length].url : ''
+    };
+  });
+}
+
+customForm.addEventListener('submit', event => {
+  event.preventDefault();
+  formError.textContent = '';
+  const count = Number(document.querySelector('#itemCount').value);
+  const minCommission = Number(document.querySelector('#commissionMin').value);
+  const maxCommission = Number(document.querySelector('#commissionMax').value);
+  const titles = document.querySelector('#customTitles').value.split('\n').map(title => title.trim()).filter(Boolean);
+
+  if (!Number.isInteger(count) || count < 1 || count > 100) {
+    formError.textContent = '生成条数请填写 1—100 之间的整数。';
+    return;
+  }
+  if (!Number.isFinite(minCommission) || !Number.isFinite(maxCommission) || minCommission <= 0 || maxCommission <= 0) {
+    formError.textContent = '请填写有效的佣金范围。';
+    return;
+  }
+  if (minCommission > maxCommission) {
+    formError.textContent = '最低佣金不能高于最高佣金。';
+    return;
+  }
+
+  renderVideoList(makeCustomData(count, minCommission, maxCommission, titles));
+  setScreen('videos');
+});
+
+document.querySelector('#restoreDemo').addEventListener('click', () => {
+  renderVideoList(videoData);
+  clearUploadedCovers();
+  customForm.reset();
+  formError.textContent = '';
+  setScreen('videos');
+});
 
 function setScreen(name) {
   document.querySelectorAll('.screen').forEach(screen => screen.classList.toggle('is-active', screen.dataset.screen === name));
@@ -129,3 +292,5 @@ document.querySelectorAll('.sort-row button').forEach(button => button.addEventL
 
 const now = new Date();
 document.querySelectorAll('.js-clock').forEach(el => el.textContent = now.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false}));
+
+window.addEventListener('beforeunload', () => uploadedCovers.forEach(item => URL.revokeObjectURL(item.url)));
